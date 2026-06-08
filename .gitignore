@@ -26,7 +26,13 @@ obj/
 *.pem
 credentials.json
 
-# Unity (if used later)
+# Godot
+.godot/
+.import/
+*.translation
+export/web/
+
+# Unity (legacy)
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
@@ -34,22 +40,3 @@ credentials.json
 [Bb]uilds/
 [Ll]ogs/
 [Uu]ser[Ss]ettings/
-*.csproj
-*.unityproj
-*.sln
-*.suo
-*.user
-*.userprefs
-*.pidb
-*.booproj
-*.svd
-*.pdb
-*.mdb
-*.opendb
-*.VC.db
-
-# Godot (if used later)
-.godot/
-.import/
-export.cfg
-export_presets.cfg
