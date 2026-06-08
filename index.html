@@ -2,20 +2,32 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Counter-Strike — Bauka Game</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <div id="desktop-block" class="overlay hidden">
+    <h2>📱 Только для телефона</h2>
+    <p>Открой игру на смартфоне в браузере.</p>
+    <p class="subtitle">Для игры с друзьями запусти сервер и открой с телефона:</p>
+    <code>npm start</code>
+  </div>
+
+  <div id="rotate-hint" class="rotate-hint hidden">
+    Поверни телефон горизонтально ↻
+  </div>
+
   <canvas id="game"></canvas>
 
   <div id="hud">
     <div class="hud-top">
-      <div class="hud-team t-side">TERRORIST</div>
+      <div id="team-label" class="hud-team t-side">TERRORIST</div>
       <div id="timer" class="hud-timer">115</div>
-      <div class="hud-team ct-side">COUNTER-TERRORIST</div>
+      <div class="hud-team ct-side">ONLINE</div>
     </div>
-
     <div class="hud-bottom">
       <div class="hud-left">
         <div class="hud-stat"><span>HP</span> <strong id="health">100</strong></div>
@@ -27,20 +39,54 @@
       </div>
       <div id="bomb-status" class="bomb-status hidden">БОМБА</div>
     </div>
+    <p id="hint">Джойстик — ходьба | правая зона — прицел</p>
+  </div>
 
-    <p id="hint">WASD — движение | мышь — прицел | ЛКМ — стрелять</p>
+  <div id="touch-controls" class="hidden">
+    <div id="joystick-zone">
+      <div class="joy-base"><div class="joy-stick"></div></div>
+    </div>
+    <div id="look-zone"></div>
+    <button id="btn-fire" class="touch-btn fire-btn">ОГОНЬ</button>
+    <button id="btn-reload" class="touch-btn">R</button>
+    <button id="btn-shop" class="touch-btn">B</button>
+    <button id="btn-bomb" class="touch-btn">E</button>
+    <button id="btn-menu" class="touch-btn menu-btn">☰</button>
   </div>
 
   <div id="start-screen" class="overlay">
     <h1>COUNTER-STRIKE</h1>
-    <p class="subtitle">Bauka Game — браузерная копия</p>
-    <ul>
-      <li>Ты за <strong>Terrorist</strong> — заложи бомбу на <strong>A</strong> или <strong>B</strong></li>
-      <li>Убей всех <strong>CT</strong> или взорви бомбу</li>
-      <li><strong>B</strong> — магазин в начале раунда</li>
-      <li><strong>R</strong> — перезарядка | <strong>E</strong> — закладка бомбы</li>
-    </ul>
-    <button id="start-btn">ИГРАТЬ</button>
+    <p class="subtitle">Bauka Game — мобильная версия</p>
+    <div class="menu-buttons">
+      <button id="solo-btn">ОДИНОЧНАЯ</button>
+      <button id="online-btn">ОНЛАЙН С ДРУЗЬЯМИ</button>
+    </div>
+  </div>
+
+  <div id="online-screen" class="overlay hidden">
+    <h2>ОНЛАЙН</h2>
+    <p id="network-status" class="subtitle">Подключение...</p>
+    <input id="player-name" class="field" placeholder="Твоё имя" maxlength="16" />
+    <div class="lobby-actions">
+      <button id="create-room">Создать комнату</button>
+      <div class="join-row">
+        <input id="room-code" class="field" placeholder="Код" maxlength="4" />
+        <button id="join-room">Войти</button>
+      </div>
+    </div>
+    <p class="room-code-label">Код комнаты:</p>
+    <p id="room-code-display" class="room-code">----</p>
+    <ul id="lobby-players" class="lobby-list"></ul>
+    <p id="lobby-hint" class="subtitle">Создай комнату и отправь код друзьям</p>
+    <p id="lobby-error" class="error-text"></p>
+    <button id="start-online" class="hidden">НАЧАТЬ ИГРУ</button>
+    <button id="lobby-back" class="btn-secondary">НАЗАД</button>
+  </div>
+
+  <div id="pause-menu" class="overlay hidden">
+    <h2>ПАУЗА</h2>
+    <button id="resume-btn">ПРОДОЛЖИТЬ</button>
+    <button id="pause-menu-btn" class="btn-secondary">В ГЛАВНОЕ МЕНЮ</button>
   </div>
 
   <div id="buy-menu" class="overlay-panel hidden">

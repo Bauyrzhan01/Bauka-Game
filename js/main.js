@@ -1,9 +1,24 @@
-import { Game } from "./game.js";
+import { initApp } from "./game.js";
 
-const canvas = document.getElementById("game");
 const ui = {
   startScreen: document.getElementById("start-screen"),
-  startBtn: document.getElementById("start-btn"),
+  soloBtn: document.getElementById("solo-btn"),
+  onlineBtn: document.getElementById("online-btn"),
+  onlineScreen: document.getElementById("online-screen"),
+  playerName: document.getElementById("player-name"),
+  roomCode: document.getElementById("room-code"),
+  createRoomBtn: document.getElementById("create-room"),
+  joinRoomBtn: document.getElementById("join-room"),
+  roomCodeDisplay: document.getElementById("room-code-display"),
+  lobbyPlayers: document.getElementById("lobby-players"),
+  lobbyHint: document.getElementById("lobby-hint"),
+  lobbyError: document.getElementById("lobby-error"),
+  networkStatus: document.getElementById("network-status"),
+  startOnlineBtn: document.getElementById("start-online"),
+  lobbyBackBtn: document.getElementById("lobby-back"),
+  pauseMenu: document.getElementById("pause-menu"),
+  resumeBtn: document.getElementById("resume-btn"),
+  pauseMenuBtn: document.getElementById("pause-menu-btn"),
   endScreen: document.getElementById("end-screen"),
   endTitle: document.getElementById("end-title"),
   endReason: document.getElementById("end-reason"),
@@ -16,9 +31,10 @@ const ui = {
   weapon: document.getElementById("weapon"),
   money: document.getElementById("money"),
   timer: document.getElementById("timer"),
+  teamLabel: document.getElementById("team-label"),
   bombStatus: document.getElementById("bomb-status"),
   hint: document.getElementById("hint"),
 };
 
-const game = new Game(canvas, ui);
-game.run();
+const game = initApp(ui);
+if (game) game.run();

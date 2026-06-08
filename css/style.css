@@ -2,6 +2,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
 }
 
 html,
@@ -12,14 +15,14 @@ body {
   background: #000;
   font-family: "Segoe UI", Tahoma, sans-serif;
   color: #e8dcc8;
-  cursor: none;
 }
 
-body.shop-open {
+body.menu-open {
   cursor: default;
 }
 
-body.shop-open .buy-item {
+body.menu-open button,
+body.menu-open input {
   cursor: pointer;
 }
 
@@ -27,41 +30,38 @@ body.shop-open .buy-item {
   display: block;
   width: 100vw;
   height: 100vh;
+  touch-action: none;
 }
 
 #hud {
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: 2;
 }
 
 .hud-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 24px;
+  padding: 8px 16px;
+  padding-top: max(8px, env(safe-area-inset-top));
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.65), transparent);
 }
 
 .hud-team {
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
 }
 
-.t-side {
-  color: #e8a020;
-}
-
-.ct-side {
-  color: #5a9fd4;
-}
+.t-side { color: #e8a020; }
+.ct-side { color: #5a9fd4; }
 
 .hud-timer {
-  font-size: 28px;
+  font-size: 22px;
   font-weight: 700;
   color: #c8ffb0;
-  text-shadow: 0 0 8px rgba(100, 255, 80, 0.4);
 }
 
 .hud-bottom {
@@ -72,61 +72,125 @@ body.shop-open .buy-item {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 20px 28px;
+  padding: 12px 16px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
   background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), transparent);
 }
 
-.hud-left {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.hud-stat {
-  font-size: 22px;
-}
-
-.hud-stat span {
-  color: #9a8a70;
-  font-size: 14px;
-}
-
-.hud-center {
-  text-align: center;
-}
-
-#weapon {
-  font-size: 18px;
-  color: #ffd080;
-  margin-bottom: 4px;
-}
-
-#ammo {
-  font-size: 32px;
-  font-weight: 700;
-  color: #fff;
-}
+.hud-left { display: flex; flex-direction: column; gap: 4px; }
+.hud-stat { font-size: 18px; }
+.hud-stat span { color: #9a8a70; font-size: 12px; }
+.hud-center { text-align: center; }
+#weapon { font-size: 14px; color: #ffd080; }
+#ammo { font-size: 24px; font-weight: 700; color: #fff; }
 
 .bomb-status {
   position: absolute;
   left: 50%;
-  bottom: 90px;
+  bottom: 70px;
   transform: translateX(-50%);
   background: rgba(180, 30, 30, 0.85);
   color: #fff;
-  padding: 8px 20px;
+  padding: 6px 14px;
   font-weight: 700;
-  letter-spacing: 1px;
+  font-size: 13px;
   border: 2px solid #ff6666;
 }
 
 #hint {
   position: fixed;
-  bottom: 80px;
+  bottom: 100px;
   left: 50%;
   transform: translateX(-50%);
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 11px;
+  text-align: center;
+  width: 90%;
+}
+
+#touch-controls {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+#joystick-zone {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 42vw;
+  height: 42vh;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.joy-base {
+  position: absolute;
+  left: 50%;
+  bottom: 28%;
+  transform: translate(-50%, 0);
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.joy-stick {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 52px;
+  height: 52px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: rgba(232, 160, 32, 0.55);
+  border: 2px solid #e8a020;
+}
+
+#look-zone {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 55vw;
+  height: 100%;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.touch-btn {
+  position: absolute;
+  pointer-events: auto;
+  background: rgba(20, 18, 14, 0.75);
+  border: 2px solid #e8a020;
+  color: #ffd080;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  font-size: 14px;
+}
+
+.fire-btn {
+  right: 18px;
+  bottom: max(22px, env(safe-area-inset-bottom));
+  width: 78px;
+  height: 78px;
   font-size: 13px;
+  background: rgba(180, 40, 20, 0.8);
+  border-color: #ff6644;
+}
+
+#btn-reload { right: 108px; bottom: 28px; }
+#btn-shop { right: 18px; bottom: 112px; }
+#btn-bomb { right: 82px; bottom: 112px; }
+.menu-btn {
+  top: max(12px, env(safe-area-inset-top));
+  right: 12px;
+  width: 44px;
+  height: 44px;
+  z-index: 5;
 }
 
 .overlay {
@@ -136,40 +200,38 @@ body.shop-open .buy-item {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.82);
-  z-index: 10;
+  background: rgba(0, 0, 0, 0.88);
+  z-index: 20;
   pointer-events: auto;
+  padding: 20px;
+  text-align: center;
 }
 
 .overlay h1 {
-  font-size: 56px;
-  letter-spacing: 6px;
+  font-size: clamp(28px, 8vw, 48px);
+  letter-spacing: 4px;
   color: #e8a020;
-  text-shadow: 0 0 30px rgba(232, 160, 32, 0.4);
   margin-bottom: 8px;
 }
 
 .overlay h2 {
-  font-size: 36px;
+  font-size: clamp(22px, 6vw, 32px);
   margin-bottom: 12px;
+  color: #e8a020;
 }
 
 .subtitle {
   color: #9a8a70;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-.overlay ul {
-  list-style: none;
-  margin-bottom: 28px;
-  line-height: 1.8;
-  text-align: left;
-  max-width: 480px;
-}
-
-.overlay li::before {
-  content: "▸ ";
-  color: #e8a020;
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(320px, 90vw);
 }
 
 .overlay button,
@@ -177,21 +239,84 @@ body.shop-open .buy-item {
   background: linear-gradient(180deg, #5a4a30, #3a2a18);
   border: 2px solid #e8a020;
   color: #ffd080;
-  padding: 14px 40px;
-  font-size: 18px;
+  padding: 14px 24px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: 2px;
-  cursor: pointer;
+  letter-spacing: 1px;
 }
 
-.overlay button:hover,
-.buy-item:hover:not(:disabled) {
-  background: linear-gradient(180deg, #7a5a30, #5a3a18);
+.btn-secondary {
+  margin-top: 10px;
+  opacity: 0.85;
+  font-size: 14px !important;
 }
 
-.hidden {
-  display: none !important;
+.field {
+  width: min(320px, 90vw);
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  background: #1a1814;
+  border: 2px solid #5a4a30;
+  color: #fff;
+  font-size: 16px;
+  text-align: center;
 }
+
+.lobby-actions {
+  width: min(320px, 90vw);
+  margin-bottom: 12px;
+}
+
+.join-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.join-row .field {
+  flex: 1;
+  margin: 0;
+}
+
+.room-code-label {
+  font-size: 12px;
+  color: #777;
+}
+
+.room-code {
+  font-size: 36px;
+  letter-spacing: 8px;
+  color: #c8ffb0;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.lobby-list {
+  list-style: none;
+  width: min(320px, 90vw);
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.lobby-list li {
+  padding: 8px 10px;
+  border-bottom: 1px solid #333;
+  font-size: 14px;
+}
+
+.lobby-list li span {
+  float: right;
+  color: #888;
+  font-size: 12px;
+}
+
+.error-text {
+  color: #ff6666;
+  font-size: 13px;
+  min-height: 18px;
+}
+
+.hidden { display: none !important; }
 
 .overlay-panel {
   position: fixed;
@@ -200,17 +325,16 @@ body.shop-open .buy-item {
   transform: translate(-50%, -50%);
   background: rgba(20, 18, 14, 0.95);
   border: 2px solid #e8a020;
-  padding: 24px 32px;
-  z-index: 11;
+  padding: 20px;
+  z-index: 25;
   pointer-events: auto;
-  min-width: 320px;
+  width: min(340px, 92vw);
 }
 
 .overlay-panel h2 {
   text-align: center;
   color: #e8a020;
-  margin-bottom: 16px;
-  letter-spacing: 3px;
+  margin-bottom: 12px;
 }
 
 #buy-list {
@@ -223,18 +347,49 @@ body.shop-open .buy-item {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 12px 16px;
-  font-size: 15px;
+  padding: 12px;
+  font-size: 14px;
 }
 
-.buy-item:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
+.buy-item:disabled { opacity: 0.4; }
 
 .buy-hint {
   text-align: center;
-  margin-top: 12px;
+  margin-top: 10px;
   font-size: 12px;
   color: #777;
+}
+
+.rotate-hint {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #e8a020;
+  text-align: center;
+  padding: 24px;
+}
+
+@media (orientation: portrait) {
+  #rotate-hint { display: flex !important; }
+  #touch-controls,
+  #hud,
+  #game { visibility: hidden; }
+}
+
+@media (orientation: landscape) {
+  #rotate-hint { display: none !important; }
+}
+
+code {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #1a1814;
+  color: #c8ffb0;
+  font-size: 14px;
 }
