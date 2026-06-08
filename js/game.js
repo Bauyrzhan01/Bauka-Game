@@ -85,6 +85,7 @@ export class Game {
       if (down && e.code === "KeyB" && this.phase === "buy") {
         this.showBuyMenu = !this.showBuyMenu;
         this.updateBuyMenu();
+        return;
       }
       if (down && e.code === "KeyR") this.reload();
     };
@@ -92,6 +93,7 @@ export class Game {
     window.addEventListener("keydown", (e) => onKey(e, true));
     window.addEventListener("keyup", (e) => onKey(e, false));
     window.addEventListener("mousedown", () => {
+      if (this.showBuyMenu) return;
       this.mouseDown = true;
       if (this.state === "menu") this.start();
       else if (this.state === "playing") this.tryShoot();
@@ -100,7 +102,7 @@ export class Game {
       this.mouseDown = false;
     });
     window.addEventListener("mousemove", (e) => {
-      if (!this.pointerLocked || this.state !== "playing") return;
+      if (!this.pointerLocked || this.state !== "playing" || this.showBuyMenu) return;
       this.player.angle += e.movementX * 0.0022;
     });
     document.addEventListener("pointerlockchange", () => {
@@ -147,12 +149,23 @@ export class Game {
     this.player.money -= weapon.price;
     this.player.weapon = createWeaponState(id);
     this.showBuyMenu = false;
-    this.ui.buyMenu.classList.add("hidden");
     this.setMessage(`Куплено: ${weapon.name}`);
+    this.updateBuyMenu();
+  }
+
+  setShopCursor(visible) {
+    document.body.classList.toggle("shop-open", visible);
+    if (visible) {
+      this.mouseDown = false;
+      document.exitPointerLock();
+    } else if (this.state === "playing") {
+      this.canvas.requestPointerLock();
+    }
   }
 
   updateBuyMenu() {
-    if (this.showBuyMenu && this.phase === "buy") {
+    const open = this.showBuyMenu && this.phase === "buy";
+    if (open) {
       this.ui.buyMenu.classList.remove("hidden");
       this.ui.buyList.innerHTML = Object.entries(WEAPONS)
         .map(([id, w]) => {
@@ -166,6 +179,7 @@ export class Game {
     } else {
       this.ui.buyMenu.classList.add("hidden");
     }
+    this.setShopCursor(open);
   }
 
   reload() {
@@ -400,7 +414,7 @@ export class Game {
       if (this.buyTimeLeft <= 0) {
         this.phase = "live";
         this.showBuyMenu = false;
-        this.ui.buyMenu.classList.add("hidden");
+        this.updateBuyMenu();
         this.setMessage("Заложи бомбу на A или B [E]");
       }
       return;
