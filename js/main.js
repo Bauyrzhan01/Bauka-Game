@@ -16,6 +16,7 @@ const ui = {
   networkStatus: document.getElementById("network-status"),
   startOnlineBtn: document.getElementById("start-online"),
   lobbyBackBtn: document.getElementById("lobby-back"),
+  shareLink: document.getElementById("share-link"),
   pauseMenu: document.getElementById("pause-menu"),
   resumeBtn: document.getElementById("resume-btn"),
   pauseMenuBtn: document.getElementById("pause-menu-btn"),

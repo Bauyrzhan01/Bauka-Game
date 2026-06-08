@@ -316,6 +316,16 @@ body.menu-open input {
   min-height: 18px;
 }
 
+.share-tip {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.share-tip a {
+  color: #c8ffb0;
+  word-break: break-all;
+}
+
 .hidden { display: none !important; }
 
 .overlay-panel {

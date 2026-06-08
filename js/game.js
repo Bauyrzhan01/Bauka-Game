@@ -8,6 +8,7 @@ import { WEAPONS, createWeaponState } from "./weapons.js";
 import { Renderer } from "./render.js";
 import { Network } from "./network.js";
 import { TouchControls, isPhone } from "./touch.js";
+import { getShareLink } from "./config.js";
 
 const ROUND_TIME = 115;
 const BUY_TIME = 20;
@@ -223,6 +224,9 @@ export class Game {
     this.mode = "online";
     this.ui.startScreen.classList.add("hidden");
     this.ui.onlineScreen.classList.remove("hidden");
+    const link = getShareLink();
+    this.ui.shareLink.href = link;
+    this.ui.shareLink.textContent = link.replace(/^https?:\/\//, "");
     this.updateCursor();
   }
 

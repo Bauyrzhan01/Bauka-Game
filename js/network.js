@@ -1,3 +1,5 @@
+import { getWsUrl } from "./config.js";
+
 export class Network {
   constructor(game) {
     this.game = game;
@@ -9,20 +11,37 @@ export class Network {
     this.connected = false;
     this.isHost = false;
     this.lastSend = 0;
+    this.wsUrl = getWsUrl();
+    this.reconnectTimer = null;
   }
 
   connect() {
-    const proto = location.protocol === "https:" ? "wss" : "ws";
-    this.ws = new WebSocket(`${proto}://${location.host}`);
+    if (this.ws?.readyState === WebSocket.OPEN || this.ws?.readyState === WebSocket.CONNECTING) {
+      return;
+    }
+
+    this.game.onNetworkStatus(`Подключение к серверу...`);
+    this.ws = new WebSocket(this.wsUrl);
+
     this.ws.onopen = () => {
       this.connected = true;
-      this.game.onNetworkStatus("Подключено");
+      this.game.onNetworkStatus("Сервер подключён");
+      if (this.roomId && this.playerId) {
+        this.game.onNetworkStatus(`Комната ${this.roomId}`);
+      }
     };
+
     this.ws.onclose = () => {
       this.connected = false;
-      this.game.onNetworkStatus("Отключено");
+      this.game.onNetworkStatus("Сервер недоступен — переподключение...");
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = setTimeout(() => this.connect(), 3000);
     };
-    this.ws.onerror = () => this.game.onNetworkStatus("Ошибка сети");
+
+    this.ws.onerror = () => {
+      this.game.onNetworkStatus("Не удалось подключиться к серверу");
+    };
+
     this.ws.onmessage = (e) => this.onMessage(JSON.parse(e.data));
   }
 
@@ -101,9 +120,12 @@ export class Network {
   }
 
   disconnect() {
+    clearTimeout(this.reconnectTimer);
+    this.reconnectTimer = null;
     this.ws?.close();
     this.ws = null;
     this.roomId = null;
+    this.playerId = null;
     this.remotePlayers.clear();
   }
 }
