@@ -1,35 +1,52 @@
-# Bauka Game
+# Bauka Game — Counter-Strike
 
-Веб-игра на **HTML + CSS + JavaScript** (Canvas).
+Браузерная копия **Counter-Strike** на JavaScript (raycasting FPS).
 
-## Что уже есть
+## Геймплей
 
-- Синий квадрат-игрок на тёмном фоне с сеткой
-- Управление: **WASD** или **стрелки**
-- Камера плавно следует за игроком
+- Ты играешь за **Terrorist**
+- 5 ботов **Counter-Terrorist** патрулируют карту
+- Заложи бомбу на сайте **A** или **B**, или убей всех CT
+- Экономика: деньги за убийства и победу в раунде
+
+## Управление
+
+| Клавиша | Действие |
+|---------|----------|
+| WASD | Движение |
+| Мышь | Прицел |
+| ЛКМ | Стрелять |
+| R | Перезарядка |
+| B | Магазин (в начале раунда) |
+| E | Заложить бомбу на сайте |
+| Shift | Медленная ходьба |
+
+## Оружие
+
+- **Glock-18** — бесплатно
+- **AK-47** — $2700
+- **AWP** — $4750
 
 ## Запуск
-
-Открой `index.html` в браузере — двойной клик по файлу или через Live Server в Cursor/VS Code.
-
-Или из терминала:
 
 ```bash
 npx --yes serve .
 ```
 
-Потом открой http://localhost:3000
+Открой http://localhost:3000 → **ИГРАТЬ** → кликни по экрану (захват мыши).
 
 ## Структура
 
 ```
-index.html   — страница
-css/         — стили
-js/game.js   — логика игры
+index.html
+css/style.css
+js/main.js      — запуск
+js/game.js      — раунды, бомба, боты
+js/render.js    — 3D raycasting
+js/map.js       — карта
+js/weapons.js   — оружие
 ```
 
 ## GitHub
 
-Репозиторий: https://github.com/Bauyrzhan01/Bauka-Game
-
-Для публикации на GitHub Pages включи Pages в настройках репозитория (ветка `main`, папка `/`).
+https://github.com/Bauyrzhan01/Bauka-Game

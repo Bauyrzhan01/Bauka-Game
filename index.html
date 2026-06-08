@@ -3,12 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bauka Game</title>
+  <title>Counter-Strike — Bauka Game</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <canvas id="game"></canvas>
-  <p id="hint">Bauka Game — двигайся WASD или стрелками</p>
-  <script src="js/game.js"></script>
+
+  <div id="hud">
+    <div class="hud-top">
+      <div class="hud-team t-side">TERRORIST</div>
+      <div id="timer" class="hud-timer">115</div>
+      <div class="hud-team ct-side">COUNTER-TERRORIST</div>
+    </div>
+
+    <div class="hud-bottom">
+      <div class="hud-left">
+        <div class="hud-stat"><span>HP</span> <strong id="health">100</strong></div>
+        <div class="hud-stat"><span>$</span> <strong id="money">$800</strong></div>
+      </div>
+      <div class="hud-center">
+        <div id="weapon">Glock-18</div>
+        <div id="ammo">20 / 120</div>
+      </div>
+      <div id="bomb-status" class="bomb-status hidden">БОМБА</div>
+    </div>
+
+    <p id="hint">WASD — движение | мышь — прицел | ЛКМ — стрелять</p>
+  </div>
+
+  <div id="start-screen" class="overlay">
+    <h1>COUNTER-STRIKE</h1>
+    <p class="subtitle">Bauka Game — браузерная копия</p>
+    <ul>
+      <li>Ты за <strong>Terrorist</strong> — заложи бомбу на <strong>A</strong> или <strong>B</strong></li>
+      <li>Убей всех <strong>CT</strong> или взорви бомбу</li>
+      <li><strong>B</strong> — магазин в начале раунда</li>
+      <li><strong>R</strong> — перезарядка | <strong>E</strong> — закладка бомбы</li>
+    </ul>
+    <button id="start-btn">ИГРАТЬ</button>
+  </div>
+
+  <div id="buy-menu" class="overlay-panel hidden">
+    <h2>МАГАЗИН</h2>
+    <div id="buy-list"></div>
+    <p class="buy-hint">B — закрыть</p>
+  </div>
+
+  <div id="end-screen" class="overlay hidden">
+    <h2 id="end-title">ПОБЕДА</h2>
+    <p id="end-reason"></p>
+    <p>Баланс: <strong id="end-money">$0</strong></p>
+    <button id="restart-btn">В МЕНЮ</button>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
