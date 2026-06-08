@@ -1,46 +1,35 @@
 # Bauka Game
 
-Веб-игра на **Godot 4** с экспортом в браузер.
+Веб-игра на **HTML + CSS + JavaScript** (Canvas).
 
 ## Что уже есть
 
-- Стартовая 2D-сцена с игроком (синий квадрат)
+- Синий квадрат-игрок на тёмном фоне с сеткой
 - Управление: **WASD** или **стрелки**
-- Пресет экспорта **Web** → `export/web/index.html`
+- Камера плавно следует за игроком
 
-## 1. Установить Godot
+## Запуск
 
-1. Скачайте **Godot 4.3+** (Standard): https://godotengine.org/download
-2. Распакуйте и запустите Godot
-3. **Import** → выберите папку `C:\Projects\Bauka Game` → **Import & Edit**
+Открой `index.html` в браузере — двойной клик по файлу или через Live Server в Cursor/VS Code.
 
-## 2. Установить шаблоны для Web
+Или из терминала:
 
-В Godot:
+```bash
+npx --yes serve .
+```
 
-1. **Editor → Manage Export Templates…**
-2. **Download and Install** (версия должна совпадать с вашим Godot)
-3. **Project → Export…** → пресет **Web** уже настроен
-4. Нажмите **Export Project** → сохраните в `export/web/index.html`
+Потом открой http://localhost:3000
 
-## 3. Запустить игру локально
-
-- В редакторе: кнопка **Play (F5)**
-- Веб-версия: откройте `export/web/index.html` в браузере  
-  (лучше через локальный сервер, если браузер блокирует файлы)
-
-## 4. Выложить в интернет (GitHub Pages)
-
-После экспорта в `export/web/` можно опубликовать игру бесплатно на GitHub Pages.
-
-## Структура проекта
+## Структура
 
 ```
-scenes/     — сцены игры
-scripts/    — код GDScript
-export/web/ — готовая веб-версия (не в git)
+index.html   — страница
+css/         — стили
+js/game.js   — логика игры
 ```
 
 ## GitHub
 
 Репозиторий: https://github.com/Bauyrzhan01/Bauka-Game
+
+Для публикации на GitHub Pages включи Pages в настройках репозитория (ветка `main`, папка `/`).

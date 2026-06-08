@@ -15,9 +15,6 @@ dist/
 build/
 bin/
 obj/
-*.exe
-*.dll
-*.pdb
 *.log
 
 # Env & secrets
@@ -25,18 +22,3 @@ obj/
 .env.*
 *.pem
 credentials.json
-
-# Godot
-.godot/
-.import/
-*.translation
-export/web/
-
-# Unity (legacy)
-[Ll]ibrary/
-[Tt]emp/
-[Oo]bj/
-[Bb]uild/
-[Bb]uilds/
-[Ll]ogs/
-[Uu]ser[Ss]ettings/
