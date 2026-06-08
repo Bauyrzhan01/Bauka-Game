@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "tunnel": "npx --yes localtunnel --port 3000"
   },
   "dependencies": {
     "express": "^4.21.2",

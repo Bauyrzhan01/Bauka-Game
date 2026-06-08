@@ -1,4 +1,4 @@
-import { getWsUrl } from "./config.js";
+import { getWsUrl, parseServerParam } from "./config.js";
 
 export class Network {
   constructor(game) {
@@ -13,22 +13,38 @@ export class Network {
     this.lastSend = 0;
     this.wsUrl = getWsUrl();
     this.reconnectTimer = null;
+    if (this.wsUrl) this.connect();
+  }
+
+  setServer(value) {
+    const url = parseServerParam(value);
+    if (!url) return false;
+    localStorage.setItem("game-server", url);
+    this.wsUrl = url;
+    this.disconnect();
+    this.connect();
+    return true;
   }
 
   connect() {
+    if (!this.wsUrl) {
+      this.game.onNetworkStatus("Укажи IP ноутбука хоста");
+      this.game.showServerSetup(true);
+      return;
+    }
+
     if (this.ws?.readyState === WebSocket.OPEN || this.ws?.readyState === WebSocket.CONNECTING) {
       return;
     }
 
-    this.game.onNetworkStatus(`Подключение к серверу...`);
+    this.game.onNetworkStatus("Подключение к серверу...");
     this.ws = new WebSocket(this.wsUrl);
 
     this.ws.onopen = () => {
       this.connected = true;
+      this.game.showServerSetup(false);
       this.game.onNetworkStatus("Сервер подключён");
-      if (this.roomId && this.playerId) {
-        this.game.onNetworkStatus(`Комната ${this.roomId}`);
-      }
+      if (this.roomId) this.game.onNetworkStatus(`Комната ${this.roomId}`);
     };
 
     this.ws.onclose = () => {
@@ -39,7 +55,7 @@ export class Network {
     };
 
     this.ws.onerror = () => {
-      this.game.onNetworkStatus("Не удалось подключиться к серверу");
+      this.game.onNetworkStatus("Не удалось подключиться. Проверь IP и npm start");
     };
 
     this.ws.onmessage = (e) => this.onMessage(JSON.parse(e.data));
@@ -50,10 +66,18 @@ export class Network {
   }
 
   createRoom(name) {
+    if (!this.connected) {
+      this.game.onNetworkError("Сначала подключись к серверу");
+      return;
+    }
     this.send({ type: "create", name });
   }
 
   joinRoom(code, name) {
+    if (!this.connected) {
+      this.game.onNetworkError("Сначала подключись к серверу");
+      return;
+    }
     this.send({ type: "join", roomId: code.toUpperCase(), name });
   }
 
@@ -124,6 +148,7 @@ export class Network {
     this.reconnectTimer = null;
     this.ws?.close();
     this.ws = null;
+    this.connected = false;
     this.roomId = null;
     this.playerId = null;
     this.remotePlayers.clear();

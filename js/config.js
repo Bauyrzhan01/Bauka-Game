@@ -1,21 +1,49 @@
-// После деплоя сервера на Render URL будет таким (имя сервиса: bauka-game)
-export const PRODUCTION_WS = "wss://bauka-game.onrender.com";
+const GITHUB_PAGE = "https://bauyrzhan01.github.io/Bauka-Game/";
+
+export function parseServerParam(value) {
+  if (!value) return null;
+  const trimmed = value.trim().replace(/\/$/, "");
+  if (trimmed.startsWith("ws://") || trimmed.startsWith("wss://")) return trimmed;
+  if (trimmed.startsWith("http://")) return `ws://${trimmed.slice(7)}`;
+  if (trimmed.startsWith("https://")) return `wss://${trimmed.slice(8)}`;
+  const isIp = /^\d+\.\d+\.\d+\.\d+(:\d+)?$/.test(trimmed) || trimmed.startsWith("localhost");
+  return `${isIp ? "ws" : "wss"}://${trimmed}`;
+}
 
 export function getWsUrl() {
-  const host = location.hostname;
-  const isLocal = host === "localhost" || /^\d+\.\d+\.\d+\.\d+$/.test(host);
+  const params = new URLSearchParams(location.search);
+  const fromUrl = parseServerParam(params.get("server"));
+  if (fromUrl) {
+    localStorage.setItem("game-server", fromUrl);
+    return fromUrl;
+  }
 
-  if (isLocal) {
+  const host = location.hostname;
+  const onLaptopServer =
+    host === "localhost" || /^\d+\.\d+\.\d+\.\d+$/.test(host) || host.endsWith(".loca.lt");
+
+  if (onLaptopServer) {
     const proto = location.protocol === "https:" ? "wss" : "ws";
     return `${proto}://${location.host}`;
   }
 
-  return PRODUCTION_WS;
+  const saved = localStorage.getItem("game-server");
+  if (saved) return saved;
+
+  return null;
 }
 
-export function getShareLink() {
-  if (location.hostname.includes("github.io")) {
-    return location.href.split("?")[0];
+export function getShareLink(serverHost) {
+  if (serverHost) return `http://${serverHost}`;
+  const host = location.hostname;
+  if (host === "localhost" || /^\d+\.\d+\.\d+\.\d+$/.test(host)) {
+    return `${location.protocol}//${location.host}`;
   }
-  return "https://bauyrzhan01.github.io/Bauka-Game/";
+  return GITHUB_PAGE;
+}
+
+export function getGithubLinkWithServer(serverHost) {
+  const base = GITHUB_PAGE.split("?")[0];
+  if (!serverHost) return base;
+  return `${base}?server=${encodeURIComponent(serverHost)}`;
 }

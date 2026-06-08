@@ -8,7 +8,10 @@ import { WEAPONS, createWeaponState } from "./weapons.js";
 import { Renderer } from "./render.js";
 import { Network } from "./network.js";
 import { TouchControls, isPhone } from "./touch.js";
-import { getShareLink } from "./config.js";
+function isOnLaptopServer() {
+  const h = location.hostname;
+  return h === "localhost" || /^\d+\.\d+\.\d+\.\d+$/.test(h) || h.endsWith(".loca.lt");
+}
 
 const ROUND_TIME = 115;
 const BUY_TIME = 20;
@@ -171,6 +174,44 @@ export class Game {
     this.ui.resumeBtn.addEventListener("click", () => this.togglePause(false));
     this.ui.pauseMenuBtn.addEventListener("click", () => this.leaveToMenu());
     this.ui.restartBtn.addEventListener("click", () => this.leaveToMenu());
+    this.ui.serverConnectBtn.addEventListener("click", () => this.connectToServer());
+    this.ui.serverHost.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") this.connectToServer();
+    });
+  }
+
+  showServerSetup(visible) {
+    this.ui.serverSetup.classList.toggle("hidden", !visible);
+  }
+
+  connectToServer() {
+    const value = this.ui.serverHost.value.trim();
+    if (!value) {
+      this.onNetworkError("Введи IP:порт, например 192.168.1.5:3000");
+      return;
+    }
+    if (this.network.setServer(value)) {
+      this.onNetworkError("");
+    }
+  }
+
+  async loadHostInfo() {
+    if (!isOnLaptopServer()) {
+      this.ui.hostInfo.classList.add("hidden");
+      return;
+    }
+    try {
+      const res = await fetch("/api/info");
+      const data = await res.json();
+      if (!data.links?.length) return;
+      this.ui.hostInfo.classList.remove("hidden");
+      this.ui.hostLinks.innerHTML = data.links
+        .map((link) => `<a href="${link}">${link.replace(/^https?:\/\//, "")}</a>`)
+        .join("");
+      this.showServerSetup(false);
+    } catch {
+      this.ui.hostInfo.classList.add("hidden");
+    }
   }
 
   updateCursor() {
@@ -224,9 +265,10 @@ export class Game {
     this.mode = "online";
     this.ui.startScreen.classList.add("hidden");
     this.ui.onlineScreen.classList.remove("hidden");
-    const link = getShareLink();
-    this.ui.shareLink.href = link;
-    this.ui.shareLink.textContent = link.replace(/^https?:\/\//, "");
+    this.loadHostInfo();
+    if (!isOnLaptopServer() && !this.network.wsUrl) {
+      this.showServerSetup(true);
+    }
     this.updateCursor();
   }
 

@@ -316,14 +316,39 @@ body.menu-open input {
   min-height: 18px;
 }
 
-.share-tip {
-  font-size: 12px;
-  line-height: 1.6;
+.host-box {
+  width: min(340px, 92vw);
+  background: rgba(30, 28, 20, 0.9);
+  border: 1px solid #5a4a30;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
 }
 
-.share-tip a {
+.host-title {
+  color: #e8a020;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.host-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.host-links a {
   color: #c8ffb0;
+  font-size: 15px;
+  font-weight: 700;
   word-break: break-all;
+}
+
+.host-box code {
+  color: #c8ffb0;
+  font-size: 12px;
 }
 
 .hidden { display: none !important; }

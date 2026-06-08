@@ -1,4 +1,5 @@
 const http = require("http");
+const os = require("os");
 const path = require("path");
 const express = require("express");
 const { WebSocketServer } = require("ws");
@@ -7,6 +8,25 @@ const { randomUUID } = require("crypto");
 const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.static(path.join(__dirname)));
+
+function getLocalIps() {
+  const ips = [];
+  for (const iface of Object.values(os.networkInterfaces())) {
+    for (const net of iface) {
+      if (net.family === "IPv4" && !net.internal) ips.push(net.address);
+    }
+  }
+  return ips;
+}
+
+app.get("/api/info", (_req, res) => {
+  const ips = getLocalIps();
+  res.json({
+    port: PORT,
+    ips,
+    links: ips.map((ip) => `http://${ip}:${PORT}`),
+  });
+});
 
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
@@ -312,6 +332,11 @@ setInterval(() => {
   }
 }, 50);
 
-server.listen(PORT, () => {
-  console.log(`Bauka Game: http://localhost:${PORT}`);
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`\n  Bauka Game — сервер на ноутбуке`);
+  console.log(`  Локально:  http://localhost:${PORT}`);
+  for (const ip of getLocalIps()) {
+    console.log(`  Для друзей: http://${ip}:${PORT}`);
+  }
+  console.log(`  (телефоны в той же Wi‑Fi сети)\n`);
 });

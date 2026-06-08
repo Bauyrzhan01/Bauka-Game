@@ -12,8 +12,9 @@
   <div id="desktop-block" class="overlay hidden">
     <h2>📱 Только для телефона</h2>
     <p>Открой игру на смартфоне в браузере.</p>
-    <p class="subtitle">Для игры с друзьями запусти сервер и открой с телефона:</p>
+    <p class="subtitle">На ноутбуке запусти сервер:</p>
     <code>npm start</code>
+    <p class="subtitle">Друзья откроют IP из терминала, например http://192.168.1.5:3000</p>
   </div>
 
   <div id="rotate-hint" class="rotate-hint hidden">
@@ -65,7 +66,20 @@
 
   <div id="online-screen" class="overlay hidden">
     <h2>ОНЛАЙН</h2>
-    <p class="subtitle share-tip">Ссылка для друзей:<br><a id="share-link" href="#">github.io/Bauka-Game</a></p>
+    <div id="host-info" class="host-box hidden">
+      <p class="host-title">📡 Сервер на твоём ноутбуке</p>
+      <p class="subtitle">Друзья открывают на телефоне (та же Wi‑Fi):</p>
+      <div id="host-links" class="host-links"></div>
+      <p class="subtitle">Потом: Онлайн → код комнаты</p>
+    </div>
+    <div id="server-setup" class="host-box">
+      <p class="host-title">IP ноутбука друга</p>
+      <p class="subtitle">Пример: <code>192.168.1.5:3000</code></p>
+      <div class="join-row">
+        <input id="server-host" class="field" placeholder="192.168.1.5:3000" />
+        <button id="server-connect">OK</button>
+      </div>
+    </div>
     <p id="network-status" class="subtitle">Подключение...</p>
     <input id="player-name" class="field" placeholder="Твоё имя" maxlength="16" />
     <div class="lobby-actions">
