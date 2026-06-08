@@ -12,7 +12,7 @@
 
 1. Скачайте **Godot 4.3+** (Standard): https://godotengine.org/download
 2. Распакуйте и запустите Godot
-3. **Import** → выберите папку `Bauka Game` → **Import & Edit**
+3. **Import** → выберите папку `C:\Projects\Bauka Game` → **Import & Edit**
 
 ## 2. Установить шаблоны для Web
 
